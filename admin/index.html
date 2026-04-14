@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,11 +11,11 @@
 
   <section id="authView" class="auth-view">
     <div class="auth-card">
-      <p class="eyebrow">OneWay Platform Control</p>
-      <h1>Admin dashboard for users, rides, bookings, and wallet signals.</h1>
+      <p class="eyebrow">OneWay Admin</p>
+      <h1>Админ хяналтын самбар</h1>
       <p class="auth-copy">
-        Sign in with a dedicated admin account. This panel is designed for
-        <code>admin.oneway.mn</code> and expects the API to be proxied at
+        Admin эрхтэй хаягаараа нэвтэр. Энэ самбар
+        <code>admin.oneway.mn</code> дээр ажиллах ба API base нь
         <code>/api</code>.
       </p>
 
@@ -25,10 +25,10 @@
           <input id="emailInput" name="email" type="email" placeholder="admin@oneway.mn" required />
         </label>
         <label>
-          <span>Password</span>
-          <input id="passwordInput" name="password" type="password" placeholder="Enter password" required />
+          <span>Нууц үг</span>
+          <input id="passwordInput" name="password" type="password" placeholder="Нууц үгээ оруул" required />
         </label>
-        <button id="loginButton" type="submit" class="primary-button">Sign in</button>
+        <button id="loginButton" type="submit" class="primary-button">Нэвтрэх</button>
       </form>
 
       <div class="auth-footer">
@@ -36,7 +36,7 @@
           <span>API base</span>
           <input id="apiBaseInput" type="text" value="/api" />
         </label>
-        <button id="saveApiBaseButton" type="button" class="ghost-button">Save API base</button>
+        <button id="saveApiBaseButton" type="button" class="ghost-button">Хадгалах</button>
       </div>
 
       <p id="authMessage" class="message"></p>
@@ -47,24 +47,24 @@
     <header class="topbar">
       <div>
         <p class="eyebrow">OneWay Admin</p>
-        <h2>Platform monitoring dashboard</h2>
+        <h2>Хяналтын самбар</h2>
       </div>
 
       <div class="topbar-actions">
         <div class="admin-meta">
-          <span id="adminIdentity" class="pill">Not signed in</span>
+          <span id="adminIdentity" class="pill">Нэвтрээгүй</span>
           <span id="apiBaseBadge" class="pill muted">API: /api</span>
         </div>
-        <button id="logoutButton" type="button" class="ghost-button">Log out</button>
+        <button id="logoutButton" type="button" class="ghost-button">Гарах</button>
       </div>
     </header>
 
     <div class="shell">
       <aside class="sidebar">
-        <button class="nav-button active" data-view="overview">Overview</button>
-        <button class="nav-button" data-view="users">Users</button>
-        <button class="nav-button" data-view="rides">Rides</button>
-        <button class="nav-button" data-view="bookings">Bookings</button>
+        <button class="nav-button active" data-view="overview">Товч</button>
+        <button class="nav-button" data-view="users">Хэрэглэгч</button>
+        <button class="nav-button" data-view="rides">Явалт</button>
+        <button class="nav-button" data-view="bookings">Захиалга</button>
       </aside>
 
       <main class="content">
@@ -73,10 +73,10 @@
         <section id="overviewSection" class="panel view-panel">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Overview</p>
-              <h3>Operational snapshot</h3>
+              <p class="eyebrow">Товч</p>
+              <h3>Ерөнхий төлөв</h3>
             </div>
-            <button id="refreshOverviewButton" type="button" class="ghost-button">Refresh</button>
+            <button id="refreshOverviewButton" type="button" class="ghost-button">Сэргээх</button>
           </div>
 
           <div id="overviewCards" class="card-grid"></div>
@@ -84,14 +84,14 @@
           <div class="split-grid">
             <div class="subpanel">
               <div class="subpanel-header">
-                <h4>Recent users</h4>
+                <h4>Сүүлийн users</h4>
               </div>
               <div id="recentUsers" class="list-block"></div>
             </div>
 
             <div class="subpanel">
               <div class="subpanel-header">
-                <h4>Recent rides</h4>
+                <h4>Сүүлийн rides</h4>
               </div>
               <div id="recentRides" class="list-block"></div>
             </div>
@@ -99,7 +99,7 @@
 
           <div class="subpanel">
             <div class="subpanel-header">
-              <h4>Recent bookings</h4>
+              <h4>Сүүлийн bookings</h4>
             </div>
             <div id="recentBookings" class="list-block"></div>
           </div>
@@ -108,45 +108,45 @@
         <section id="usersSection" class="panel view-panel hidden">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Users</p>
-              <h3>Search and filter platform accounts</h3>
+              <p class="eyebrow">Хэрэглэгч</p>
+              <h3>Хэрэглэгч шүүх</h3>
             </div>
-            <button id="refreshUsersButton" type="button" class="ghost-button">Refresh</button>
+            <button id="refreshUsersButton" type="button" class="ghost-button">Сэргээх</button>
           </div>
 
           <form id="usersFilters" class="filters">
-            <input name="search" type="text" placeholder="Search by name, phone, email" />
+            <input name="search" type="text" placeholder="Нэр, утас, email" />
             <select name="role">
-              <option value="">All roles</option>
-              <option value="driver">Driver</option>
-              <option value="passenger">Passenger</option>
+              <option value="">Бүх төрөл</option>
+              <option value="driver">Жолооч</option>
+              <option value="passenger">Зорчигч</option>
             </select>
             <select name="verification_status">
-              <option value="">All verification</option>
-              <option value="none">None</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="">Бүх баталгаажуулалт</option>
+              <option value="none">Байхгүй</option>
+              <option value="pending">Хүлээгдэж буй</option>
+              <option value="approved">Зөвшөөрсөн</option>
+              <option value="rejected">Татгалзсан</option>
             </select>
             <select name="blocked">
-              <option value="">All states</option>
-              <option value="true">Blocked</option>
-              <option value="false">Active</option>
+              <option value="">Бүх төлөв</option>
+              <option value="true">Хаалттай</option>
+              <option value="false">Идэвхтэй</option>
             </select>
-            <button type="submit" class="primary-button">Apply</button>
+            <button type="submit" class="primary-button">Шүүх</button>
           </form>
 
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>User</th>
-                  <th>Role</th>
-                  <th>Verification</th>
-                  <th>Wallet</th>
-                  <th>Signals</th>
-                  <th>Last login</th>
-                  <th>Created</th>
+                  <th>Хэрэглэгч</th>
+                  <th>Төрөл</th>
+                  <th>Баталгаажуулалт</th>
+                  <th>Хэтэвч</th>
+                  <th>Төлөв</th>
+                  <th>Сүүлд</th>
+                  <th>Үүссэн</th>
                 </tr>
               </thead>
               <tbody id="usersTableBody"></tbody>
@@ -154,35 +154,35 @@
           </div>
 
           <div class="pagination">
-            <button id="usersPrevButton" type="button" class="ghost-button">Previous</button>
-            <span id="usersPaginationLabel">Page 1</span>
-            <button id="usersNextButton" type="button" class="ghost-button">Next</button>
+            <button id="usersPrevButton" type="button" class="ghost-button">Өмнөх</button>
+            <span id="usersPaginationLabel">Хуудас 1</span>
+            <button id="usersNextButton" type="button" class="ghost-button">Дараах</button>
           </div>
         </section>
 
         <section id="ridesSection" class="panel view-panel hidden">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Rides</p>
-              <h3>Trip monitoring by route, driver, and status</h3>
+              <p class="eyebrow">Явалт</p>
+              <h3>Ride хяналт</h3>
             </div>
-            <button id="refreshRidesButton" type="button" class="ghost-button">Refresh</button>
+            <button id="refreshRidesButton" type="button" class="ghost-button">Сэргээх</button>
           </div>
 
           <form id="ridesFilters" class="filters">
-            <input name="search" type="text" placeholder="Search route, driver, plate" />
+            <input name="search" type="text" placeholder="Чиглэл, жолооч, дугаар" />
             <select name="status">
-              <option value="">All statuses</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="scheduled">Scheduled</option>
-              <option value="started">Started</option>
-              <option value="full">Full</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="">Бүх төлөв</option>
+              <option value="active">Идэвхтэй</option>
+              <option value="pending">Хүлээгдэж буй</option>
+              <option value="scheduled">Товлосон</option>
+              <option value="started">Эхэлсэн</option>
+              <option value="full">Дүүрсэн</option>
+              <option value="completed">Дууссан</option>
+              <option value="cancelled">Цуцлагдсан</option>
             </select>
             <input name="ride_date" type="date" />
-            <button type="submit" class="primary-button">Apply</button>
+            <button type="submit" class="primary-button">Шүүх</button>
           </form>
 
           <div class="table-wrap">
@@ -190,12 +190,12 @@
               <thead>
                 <tr>
                   <th>Ride</th>
-                  <th>Driver</th>
-                  <th>Status</th>
-                  <th>Seats</th>
-                  <th>Price</th>
-                  <th>Vehicle</th>
-                  <th>Created</th>
+                  <th>Жолооч</th>
+                  <th>Төлөв</th>
+                  <th>Суудал</th>
+                  <th>Үнэ</th>
+                  <th>Машин</th>
+                  <th>Үүссэн</th>
                 </tr>
               </thead>
               <tbody id="ridesTableBody"></tbody>
@@ -203,37 +203,37 @@
           </div>
 
           <div class="pagination">
-            <button id="ridesPrevButton" type="button" class="ghost-button">Previous</button>
-            <span id="ridesPaginationLabel">Page 1</span>
-            <button id="ridesNextButton" type="button" class="ghost-button">Next</button>
+            <button id="ridesPrevButton" type="button" class="ghost-button">Өмнөх</button>
+            <span id="ridesPaginationLabel">Хуудас 1</span>
+            <button id="ridesNextButton" type="button" class="ghost-button">Дараах</button>
           </div>
         </section>
 
         <section id="bookingsSection" class="panel view-panel hidden">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Bookings</p>
-              <h3>Passenger demand, approval flow, and attendance</h3>
+              <p class="eyebrow">Захиалга</p>
+              <h3>Booking хяналт</h3>
             </div>
-            <button id="refreshBookingsButton" type="button" class="ghost-button">Refresh</button>
+            <button id="refreshBookingsButton" type="button" class="ghost-button">Сэргээх</button>
           </div>
 
           <form id="bookingsFilters" class="filters">
-            <input name="search" type="text" placeholder="Search booking, passenger, driver, route" />
+            <input name="search" type="text" placeholder="Booking, зорчигч, жолооч" />
             <select name="status">
-              <option value="">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="">Бүх төлөв</option>
+              <option value="pending">Хүлээгдэж буй</option>
+              <option value="approved">Зөвшөөрсөн</option>
+              <option value="rejected">Татгалзсан</option>
+              <option value="cancelled">Цуцлагдсан</option>
             </select>
             <select name="attendance_status">
-              <option value="">All attendance</option>
-              <option value="unknown">Unknown</option>
-              <option value="arrived">Arrived</option>
-              <option value="no_show">No show</option>
+              <option value="">Бүх ирц</option>
+              <option value="unknown">Тодорхойгүй</option>
+              <option value="arrived">Ирсэн</option>
+              <option value="no_show">Ирээгүй</option>
             </select>
-            <button type="submit" class="primary-button">Apply</button>
+            <button type="submit" class="primary-button">Шүүх</button>
           </form>
 
           <div class="table-wrap">
@@ -241,12 +241,12 @@
               <thead>
                 <tr>
                   <th>Booking</th>
-                  <th>Passenger</th>
-                  <th>Driver</th>
+                  <th>Зорчигч</th>
+                  <th>Жолооч</th>
                   <th>Ride</th>
-                  <th>Status</th>
-                  <th>Attendance</th>
-                  <th>Created</th>
+                  <th>Төлөв</th>
+                  <th>Ирц</th>
+                  <th>Үүссэн</th>
                 </tr>
               </thead>
               <tbody id="bookingsTableBody"></tbody>
@@ -254,9 +254,9 @@
           </div>
 
           <div class="pagination">
-            <button id="bookingsPrevButton" type="button" class="ghost-button">Previous</button>
-            <span id="bookingsPaginationLabel">Page 1</span>
-            <button id="bookingsNextButton" type="button" class="ghost-button">Next</button>
+            <button id="bookingsPrevButton" type="button" class="ghost-button">Өмнөх</button>
+            <span id="bookingsPaginationLabel">Хуудас 1</span>
+            <button id="bookingsNextButton" type="button" class="ghost-button">Дараах</button>
           </div>
         </section>
       </main>
