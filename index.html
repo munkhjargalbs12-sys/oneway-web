@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneWay</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      text-align: center;
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+    }
+
+    .logo {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    .coming {
+      font-size: 14px;
+      letter-spacing: 4px;
+      opacity: 0.6;
+      margin-bottom: 30px;
+    }
+
+    .hero-img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 12px;
+      margin: 20px 0 40px 0;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .logo {
+        font-size: 40px;
+      }
+
+      .story {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">ONEWAY</div>
+    <div class="tagline">Нэг чиглэл. Нэг зам. Хамтдаа.</div>
+    <div class="coming">COMING SOON...mj</div>
+
+    <img src="./images/fireH.jpg" class="hero-img" alt="OneWay Image" />
+
+    <div style="text-align: center; margin: 32px 0 20px 0;">
+      <a
+        href="./downloads/oneway-1.0.1.apk"
+        download
+        style="
+          display: inline-block;
+          background: #22c55e;
+          color: white;
+          text-decoration: none;
+          padding: 14px 28px;
+          border-radius: 12px;
+          font-size: 18px;
+          font-weight: 700;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        "
+      >
+        OneWay APK татах
+      </a>
+    </div>
+  </div>
+</body>
+</html>
