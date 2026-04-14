@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneWay Admin</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="backdrop"></div>
+
+  <section id="authView" class="auth-view">
+    <div class="auth-card">
+      <p class="eyebrow">OneWay Platform Control</p>
+      <h1>Admin dashboard for users, rides, bookings, and wallet signals.</h1>
+      <p class="auth-copy">
+        Sign in with a dedicated admin account. This panel is designed for
+        <code>admin.oneway.mn</code> and expects the API to be proxied at
+        <code>/api</code>.
+      </p>
+
+      <form id="loginForm" class="auth-form">
+        <label>
+          <span>Email</span>
+          <input id="emailInput" name="email" type="email" placeholder="admin@oneway.mn" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="passwordInput" name="password" type="password" placeholder="Enter password" required />
+        </label>
+        <button id="loginButton" type="submit" class="primary-button">Sign in</button>
+      </form>
+
+      <div class="auth-footer">
+        <label class="api-config">
+          <span>API base</span>
+          <input id="apiBaseInput" type="text" value="/api" />
+        </label>
+        <button id="saveApiBaseButton" type="button" class="ghost-button">Save API base</button>
+      </div>
+
+      <p id="authMessage" class="message"></p>
+    </div>
+  </section>
+
+  <section id="dashboardView" class="dashboard-view hidden">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">OneWay Admin</p>
+        <h2>Platform monitoring dashboard</h2>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="admin-meta">
+          <span id="adminIdentity" class="pill">Not signed in</span>
+          <span id="apiBaseBadge" class="pill muted">API: /api</span>
+        </div>
+        <button id="logoutButton" type="button" class="ghost-button">Log out</button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <button class="nav-button active" data-view="overview">Overview</button>
+        <button class="nav-button" data-view="users">Users</button>
+        <button class="nav-button" data-view="rides">Rides</button>
+        <button class="nav-button" data-view="bookings">Bookings</button>
+      </aside>
+
+      <main class="content">
+        <div id="globalMessage" class="message"></div>
+
+        <section id="overviewSection" class="panel view-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h3>Operational snapshot</h3>
+            </div>
+            <button id="refreshOverviewButton" type="button" class="ghost-button">Refresh</button>
+          </div>
+
+          <div id="overviewCards" class="card-grid"></div>
+
+          <div class="split-grid">
+            <div class="subpanel">
+              <div class="subpanel-header">
+                <h4>Recent users</h4>
+              </div>
+              <div id="recentUsers" class="list-block"></div>
+            </div>
+
+            <div class="subpanel">
+              <div class="subpanel-header">
+                <h4>Recent rides</h4>
+              </div>
+              <div id="recentRides" class="list-block"></div>
+            </div>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-header">
+              <h4>Recent bookings</h4>
+            </div>
+            <div id="recentBookings" class="list-block"></div>
+          </div>
+        </section>
+
+        <section id="usersSection" class="panel view-panel hidden">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Users</p>
+              <h3>Search and filter platform accounts</h3>
+            </div>
+            <button id="refreshUsersButton" type="button" class="ghost-button">Refresh</button>
+          </div>
+
+          <form id="usersFilters" class="filters">
+            <input name="search" type="text" placeholder="Search by name, phone, email" />
+            <select name="role">
+              <option value="">All roles</option>
+              <option value="driver">Driver</option>
+              <option value="passenger">Passenger</option>
+            </select>
+            <select name="verification_status">
+              <option value="">All verification</option>
+              <option value="none">None</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select name="blocked">
+              <option value="">All states</option>
+              <option value="true">Blocked</option>
+              <option value="false">Active</option>
+            </select>
+            <button type="submit" class="primary-button">Apply</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Verification</th>
+                  <th>Wallet</th>
+                  <th>Signals</th>
+                  <th>Last login</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <button id="usersPrevButton" type="button" class="ghost-button">Previous</button>
+            <span id="usersPaginationLabel">Page 1</span>
+            <button id="usersNextButton" type="button" class="ghost-button">Next</button>
+          </div>
+        </section>
+
+        <section id="ridesSection" class="panel view-panel hidden">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Rides</p>
+              <h3>Trip monitoring by route, driver, and status</h3>
+            </div>
+            <button id="refreshRidesButton" type="button" class="ghost-button">Refresh</button>
+          </div>
+
+          <form id="ridesFilters" class="filters">
+            <input name="search" type="text" placeholder="Search route, driver, plate" />
+            <select name="status">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="started">Started</option>
+              <option value="full">Full</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <input name="ride_date" type="date" />
+            <button type="submit" class="primary-button">Apply</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ride</th>
+                  <th>Driver</th>
+                  <th>Status</th>
+                  <th>Seats</th>
+                  <th>Price</th>
+                  <th>Vehicle</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="ridesTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <button id="ridesPrevButton" type="button" class="ghost-button">Previous</button>
+            <span id="ridesPaginationLabel">Page 1</span>
+            <button id="ridesNextButton" type="button" class="ghost-button">Next</button>
+          </div>
+        </section>
+
+        <section id="bookingsSection" class="panel view-panel hidden">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Bookings</p>
+              <h3>Passenger demand, approval flow, and attendance</h3>
+            </div>
+            <button id="refreshBookingsButton" type="button" class="ghost-button">Refresh</button>
+          </div>
+
+          <form id="bookingsFilters" class="filters">
+            <input name="search" type="text" placeholder="Search booking, passenger, driver, route" />
+            <select name="status">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <select name="attendance_status">
+              <option value="">All attendance</option>
+              <option value="unknown">Unknown</option>
+              <option value="arrived">Arrived</option>
+              <option value="no_show">No show</option>
+            </select>
+            <button type="submit" class="primary-button">Apply</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Booking</th>
+                  <th>Passenger</th>
+                  <th>Driver</th>
+                  <th>Ride</th>
+                  <th>Status</th>
+                  <th>Attendance</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <button id="bookingsPrevButton" type="button" class="ghost-button">Previous</button>
+            <span id="bookingsPaginationLabel">Page 1</span>
+            <button id="bookingsNextButton" type="button" class="ghost-button">Next</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <script src="./app.js"></script>
+</body>
+</html>
