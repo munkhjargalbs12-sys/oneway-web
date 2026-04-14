@@ -15,6 +15,10 @@ function $(id) {
   return document.getElementById(id);
 }
 
+function bi(mn, en) {
+  return `${mn} / ${en}`;
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -37,29 +41,29 @@ function buildBadge(label, tone = "info") {
 
 function translateRole(role) {
   const labels = {
-    driver: "Жолооч",
-    passenger: "Зорчигч",
-    super_admin: "Admin",
+    driver: bi("Жолооч", "Driver"),
+    passenger: bi("Зорчигч", "Passenger"),
+    super_admin: bi("Админ", "Admin"),
   };
   return labels[String(role || "").toLowerCase()] || String(role || "-");
 }
 
 function translateStatus(status) {
   const labels = {
-    none: "Байхгүй",
-    pending: "Хүлээгдэж буй",
-    approved: "Зөвшөөрсөн",
-    rejected: "Татгалзсан",
-    active: "Идэвхтэй",
-    scheduled: "Товлосон",
-    started: "Эхэлсэн",
-    full: "Дүүрсэн",
-    completed: "Дууссан",
-    cancelled: "Цуцлагдсан",
-    blocked: "Хаалттай",
-    unknown: "Тодорхойгүй",
-    arrived: "Ирсэн",
-    no_show: "Ирээгүй",
+    none: bi("Байхгүй", "None"),
+    pending: bi("Хүлээгдэж буй", "Pending"),
+    approved: bi("Зөвшөөрсөн", "Approved"),
+    rejected: bi("Татгалзсан", "Rejected"),
+    active: bi("Идэвхтэй", "Active"),
+    scheduled: bi("Товлосон", "Scheduled"),
+    started: bi("Эхэлсэн", "Started"),
+    full: bi("Дүүрсэн", "Full"),
+    completed: bi("Дууссан", "Completed"),
+    cancelled: bi("Цуцлагдсан", "Cancelled"),
+    blocked: bi("Хаалттай", "Blocked"),
+    unknown: bi("Тодорхойгүй", "Unknown"),
+    arrived: bi("Ирсэн", "Arrived"),
+    no_show: bi("Ирээгүй", "No show"),
   };
   return labels[String(status || "").toLowerCase()] || String(status || "-");
 }
@@ -110,12 +114,12 @@ async function api(path, options = {}) {
 
   if (response.status === 401 && path !== "/admin/auth/login") {
     clearSession();
-    throw new Error("Сешн дууссан. Дахин нэвтэр.");
+    throw new Error(bi("Сешн дууссан", "Session expired"));
   }
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data.message || data.error || "Хүсэлт амжилтгүй");
+    throw new Error(data.message || data.error || bi("Хүсэлт амжилтгүй", "Request failed"));
   }
 
   return data;
@@ -141,7 +145,7 @@ function renderAuthState() {
   if (signedIn) {
     elements.adminIdentity.textContent = `${state.admin.full_name} (${translateRole(state.admin.role)})`;
   } else {
-    elements.adminIdentity.textContent = "Нэвтрээгүй";
+    elements.adminIdentity.textContent = bi("Нэвтрээгүй", "Not signed in");
   }
 
   updateApiBaseUi();
@@ -169,23 +173,23 @@ function renderList(items, renderItem, emptyMessage) {
 function renderOverview() {
   if (!state.overview) {
     elements.overviewCards.innerHTML = "";
-    elements.recentUsers.innerHTML = '<div class="empty-state">Товч мэдээлэл хараахан ачаалаагүй.</div>';
-    elements.recentRides.innerHTML = '<div class="empty-state">Ride мэдээлэл хараахан алга.</div>';
-    elements.recentBookings.innerHTML = '<div class="empty-state">Booking мэдээлэл хараахан алга.</div>';
+    elements.recentUsers.innerHTML = `<div class="empty-state">${escapeHtml(bi("Товч мэдээлэл хараахан ачаалаагүй", "Overview not loaded yet"))}.</div>`;
+    elements.recentRides.innerHTML = `<div class="empty-state">${escapeHtml(bi("Явалтын мэдээлэл хараахан ачаалаагүй", "Ride data not loaded yet"))}.</div>`;
+    elements.recentBookings.innerHTML = `<div class="empty-state">${escapeHtml(bi("Захиалгын мэдээлэл хараахан ачаалаагүй", "Booking data not loaded yet"))}.</div>`;
     return;
   }
 
   const summary = state.overview.summary;
   const metrics = [
-    ["Нийт users", summary.total_users],
-    ["Жолооч", summary.total_drivers],
-    ["Зорчигч", summary.total_passengers],
-    ["Идэвхтэй rides", summary.active_rides],
-    ["Pending bookings", summary.pending_bookings],
-    ["Locked balance", summary.total_locked_balance],
-    ["Өнөөдрийн users", summary.today_users],
-    ["Өнөөдрийн rides", summary.today_rides],
-    ["Өнөөдрийн bookings", summary.today_bookings],
+    [bi("Нийт хэрэглэгч", "Total users"), summary.total_users],
+    [bi("Жолооч", "Drivers"), summary.total_drivers],
+    [bi("Зорчигч", "Passengers"), summary.total_passengers],
+    [bi("Идэвхтэй явалт", "Active rides"), summary.active_rides],
+    [bi("Хүлээгдэж буй захиалга", "Pending bookings"), summary.pending_bookings],
+    [bi("Түгжээтэй үлдэгдэл", "Locked balance"), summary.total_locked_balance],
+    [bi("Өнөөдрийн хэрэглэгч", "Today users"), summary.today_users],
+    [bi("Өнөөдрийн явалт", "Today rides"), summary.today_rides],
+    [bi("Өнөөдрийн захиалга", "Today bookings"), summary.today_bookings],
   ];
 
   elements.overviewCards.innerHTML = metrics
@@ -208,19 +212,19 @@ function renderOverview() {
         <div class="list-row-meta">${escapeHtml(formatDate(user.created_at))}</div>
       </div>
     `,
-    "Сүүлийн хэрэглэгч алга"
+    bi("Сүүлийн хэрэглэгч алга", "No recent users")
   );
 
   elements.recentRides.innerHTML = renderList(
     state.overview.recent.rides,
     (ride) => `
       <div class="list-row">
-        <div class="list-row-title">#${ride.id} | ${escapeHtml(ride.end_location || "Чиглэлгүй")}</div>
-        <div class="list-row-meta">${escapeHtml(ride.driver_name || "Жолоочгүй")} | ${escapeHtml(translateStatus(ride.status))}</div>
+        <div class="list-row-title">#${ride.id} | ${escapeHtml(ride.end_location || bi("Чиглэлгүй", "No route"))}</div>
+        <div class="list-row-meta">${escapeHtml(ride.driver_name || bi("Жолоочгүй", "No driver"))} | ${escapeHtml(translateStatus(ride.status))}</div>
         <div class="list-row-meta">${escapeHtml(ride.ride_date || "-")} ${escapeHtml(ride.start_time || "")}</div>
       </div>
     `,
-    "Сүүлийн ride алга"
+    bi("Сүүлийн явалт алга", "No recent rides")
   );
 
   elements.recentBookings.innerHTML = renderList(
@@ -228,11 +232,11 @@ function renderOverview() {
     (booking) => `
       <div class="list-row">
         <div class="list-row-title">Booking #${booking.id} | Ride #${escapeHtml(booking.ride_id || "-")}</div>
-        <div class="list-row-meta">${escapeHtml(booking.passenger_name || "Зорчигчгүй")} -> ${escapeHtml(booking.driver_name || "Жолоочгүй")}</div>
+        <div class="list-row-meta">${escapeHtml(booking.passenger_name || bi("Зорчигчгүй", "No passenger"))} -> ${escapeHtml(booking.driver_name || bi("Жолоочгүй", "No driver"))}</div>
         <div class="list-row-meta">${escapeHtml(translateStatus(booking.status))} | ${escapeHtml(translateStatus(booking.attendance_status || "unknown"))} | ${escapeHtml(booking.end_location || "-")}</div>
       </div>
     `,
-    "Сүүлийн booking алга"
+    bi("Сүүлийн захиалга алга", "No recent bookings")
   );
 }
 
@@ -254,22 +258,22 @@ function renderUsers() {
               <td>
                 <div class="badge-row">
                   ${buildBadge(translateStatus(user.verification_status || "none"), statusTone(user.verification_status))}
-                  ${user.email_verified ? buildBadge("email", "success") : ""}
-                  ${user.phone_verified ? buildBadge("phone", "success") : ""}
-                  ${user.vehicle_verified ? buildBadge("машин", "success") : ""}
+                  ${user.email_verified ? buildBadge(bi("Имэйл", "Email"), "success") : ""}
+                  ${user.phone_verified ? buildBadge(bi("Утас", "Phone"), "success") : ""}
+                  ${user.vehicle_verified ? buildBadge(bi("Машин", "Vehicle"), "success") : ""}
                 </div>
               </td>
               <td>
                 <div class="stack">
-                  <span>Үлдэгдэл: ${escapeHtml(user.balance)}</span>
-                  <span class="muted">Locked: ${escapeHtml(user.locked_balance)}</span>
+                  <span>${escapeHtml(bi("Үлдэгдэл", "Balance"))}: ${escapeHtml(user.balance)}</span>
+                  <span class="muted">${escapeHtml(bi("Түгжээтэй", "Locked"))}: ${escapeHtml(user.locked_balance)}</span>
                 </div>
               </td>
               <td>
                 <div class="badge-row">
-                  ${user.driver_verified ? buildBadge("жолооч", "success") : ""}
-                  ${user.one_way_verified ? buildBadge("oneway", "success") : ""}
-                  ${user.is_blocked ? buildBadge("хаалттай", "danger") : buildBadge("идэвхтэй", "success")}
+                  ${user.driver_verified ? buildBadge(bi("Жолооч", "Driver"), "success") : ""}
+                  ${user.one_way_verified ? buildBadge("OneWay", "success") : ""}
+                  ${user.is_blocked ? buildBadge(bi("Хаалттай", "Blocked"), "danger") : buildBadge(bi("Идэвхтэй", "Active"), "success")}
                 </div>
               </td>
               <td>${escapeHtml(formatDate(user.last_login_at))}</td>
@@ -278,7 +282,7 @@ function renderUsers() {
           `
         )
         .join("")
-    : '<tr><td colspan="7"><div class="empty-state">Хэрэглэгч олдсонгүй.</div></td></tr>';
+    : `<tr><td colspan="7"><div class="empty-state">${escapeHtml(bi("Хэрэглэгч олдсонгүй", "No users found"))}.</div></td></tr>`;
 
   renderPagination("users", state.users.pagination);
 }
@@ -292,14 +296,14 @@ function renderRides() {
             <tr>
               <td>
                 <div class="stack">
-                  <strong>#${ride.id} | ${escapeHtml(ride.end_location || "Чиглэлгүй")}</strong>
+                  <strong>#${ride.id} | ${escapeHtml(ride.end_location || bi("Чиглэлгүй", "No route"))}</strong>
                   <span class="muted">${escapeHtml(ride.start_location || "-")}</span>
                   <span class="muted">${escapeHtml(ride.ride_date || "-")} ${escapeHtml(ride.start_time || "")}</span>
                 </div>
               </td>
-              <td>${escapeHtml(ride.driver_name || "Жолоочгүй")}</td>
+              <td>${escapeHtml(ride.driver_name || bi("Жолоочгүй", "No driver"))}</td>
               <td>${buildBadge(translateStatus(ride.status || "unknown"), statusTone(ride.status))}</td>
-              <td>${escapeHtml(`${ride.seats_taken}/${ride.seats_total} суудал`)}</td>
+              <td>${escapeHtml(`${ride.seats_taken}/${ride.seats_total} ${bi("суудал", "seats")}`)}</td>
               <td>${escapeHtml(ride.price)}</td>
               <td>
                 <div class="stack">
@@ -312,7 +316,7 @@ function renderRides() {
           `
         )
         .join("")
-    : '<tr><td colspan="7"><div class="empty-state">Ride олдсонгүй.</div></td></tr>';
+    : `<tr><td colspan="7"><div class="empty-state">${escapeHtml(bi("Явалт олдсонгүй", "No rides found"))}.</div></td></tr>`;
 
   renderPagination("rides", state.rides.pagination);
 }
@@ -327,16 +331,16 @@ function renderBookings() {
               <td>
                 <div class="stack">
                   <strong>#${booking.id}</strong>
-                  <span class="muted">Ride #${escapeHtml(booking.ride_id || "-")} | Суудал ${escapeHtml(booking.seats_booked)}</span>
+                  <span class="muted">Ride #${escapeHtml(booking.ride_id || "-")} | ${escapeHtml(bi("Суудал", "Seats"))} ${escapeHtml(booking.seats_booked)}</span>
                 </div>
               </td>
               <td>
                 <div class="stack">
-                  <span>${escapeHtml(booking.passenger_name || "Зорчигчгүй")}</span>
+                  <span>${escapeHtml(booking.passenger_name || bi("Зорчигчгүй", "No passenger"))}</span>
                   <span class="muted">${escapeHtml(booking.passenger_phone || "-")}</span>
                 </div>
               </td>
-              <td>${escapeHtml(booking.driver_name || "Жолоочгүй")}</td>
+              <td>${escapeHtml(booking.driver_name || bi("Жолоочгүй", "No driver"))}</td>
               <td>
                 <div class="stack">
                   <span>${escapeHtml(booking.end_location || "-")}</span>
@@ -350,7 +354,7 @@ function renderBookings() {
           `
         )
         .join("")
-    : '<tr><td colspan="7"><div class="empty-state">Booking олдсонгүй.</div></td></tr>';
+    : `<tr><td colspan="7"><div class="empty-state">${escapeHtml(bi("Захиалга олдсонгүй", "No bookings found"))}.</div></td></tr>`;
 
   renderPagination("bookings", state.bookings.pagination);
 }
@@ -359,15 +363,15 @@ function renderPagination(prefix, pagination) {
   const page = Number(pagination?.page || 1);
   const totalPages = Number(pagination?.total_pages || 0);
   $(`${prefix}PaginationLabel`).textContent = totalPages
-    ? `Хуудас ${page} / ${totalPages}`
-    : "Хуудас 1";
+    ? `${bi("Хуудас", "Page")} ${page} / ${totalPages}`
+    : `${bi("Хуудас", "Page")} 1`;
   $(`${prefix}PrevButton`).disabled = page <= 1;
   $(`${prefix}NextButton`).disabled = totalPages === 0 || page >= totalPages;
 }
 
 async function login(event) {
   event.preventDefault();
-  setMessage(elements.authMessage, "Нэвтэрч байна...");
+  setMessage(elements.authMessage, `${bi("Нэвтэрч байна", "Signing in")}...`);
 
   try {
     const payload = {
@@ -414,7 +418,7 @@ async function bootstrapDashboard() {
 }
 
 async function loadOverview() {
-  setMessage(elements.globalMessage, "Товч мэдээлэл ачаалж байна...");
+  setMessage(elements.globalMessage, `${bi("Товч мэдээлэл ачаалж байна", "Loading overview")}...`);
   try {
     state.overview = await api("/admin/overview");
     renderOverview();
@@ -428,7 +432,7 @@ async function loadUsers(page = 1) {
   const params = serializeForm(elements.usersFilters);
   params.set("page", page);
   params.set("page_size", 20);
-  setMessage(elements.globalMessage, "Хэрэглэгч ачаалж байна...");
+  setMessage(elements.globalMessage, `${bi("Хэрэглэгч ачаалж байна", "Loading users")}...`);
 
   try {
     state.users = await api(`/admin/users?${params.toString()}`);
@@ -443,7 +447,7 @@ async function loadRides(page = 1) {
   const params = serializeForm(elements.ridesFilters);
   params.set("page", page);
   params.set("page_size", 20);
-  setMessage(elements.globalMessage, "Ride ачаалж байна...");
+  setMessage(elements.globalMessage, `${bi("Явалт ачаалж байна", "Loading rides")}...`);
 
   try {
     state.rides = await api(`/admin/rides?${params.toString()}`);
@@ -458,7 +462,7 @@ async function loadBookings(page = 1) {
   const params = serializeForm(elements.bookingsFilters);
   params.set("page", page);
   params.set("page_size", 20);
-  setMessage(elements.globalMessage, "Booking ачаалж байна...");
+  setMessage(elements.globalMessage, `${bi("Захиалга ачаалж байна", "Loading bookings")}...`);
 
   try {
     state.bookings = await api(`/admin/bookings?${params.toString()}`);
@@ -480,12 +484,12 @@ function bindEvents() {
     state.apiBase = elements.apiBaseInput.value.trim() || "/api";
     localStorage.setItem("oneway_admin_api_base", state.apiBase);
     updateApiBaseUi();
-    setMessage(elements.authMessage, "API base хадгаллаа.");
+    setMessage(elements.authMessage, `${bi("API base хадгаллаа", "API base saved")}.`);
   });
 
   elements.logoutButton.addEventListener("click", () => {
     clearSession();
-    setMessage(elements.authMessage, "Системээс гарлаа.");
+    setMessage(elements.authMessage, `${bi("Системээс гарлаа", "Signed out")}.`);
   });
 
   document.querySelectorAll(".nav-button").forEach((button) => {
