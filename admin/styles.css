@@ -1,13 +1,13 @@
 :root {
-  --bg: #08111f;
-  --panel: rgba(15, 27, 47, 0.88);
-  --border: rgba(164, 191, 255, 0.15);
+  --bg: #17263b;
+  --panel: rgba(27, 43, 66, 0.84);
+  --border: rgba(190, 214, 255, 0.2);
   --text: #eef4ff;
-  --muted: #94a6c6;
+  --muted: #b4c4de;
   --brand: #4ade80;
   --brand-strong: #22c55e;
   --danger: #fb7185;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --shadow: 0 24px 70px rgba(15, 23, 42, 0.32);
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
@@ -40,9 +40,9 @@ body {
   margin: 0;
   font-family: var(--font);
   background:
-    radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 25%),
-    radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 20%),
-    linear-gradient(160deg, #050a14 0%, #0b1526 42%, #07101c 100%);
+    radial-gradient(circle at top left, rgba(74, 222, 128, 0.2), transparent 28%),
+    radial-gradient(circle at top right, rgba(125, 211, 252, 0.18), transparent 24%),
+    linear-gradient(160deg, #17263b 0%, #213a57 46%, #254f58 100%);
   color: var(--text);
   transition: background 180ms ease, color 180ms ease;
 }
@@ -59,8 +59,8 @@ body {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(120deg, rgba(34, 197, 94, 0.05), transparent 30%),
-    linear-gradient(310deg, rgba(96, 165, 250, 0.08), transparent 35%);
+    linear-gradient(120deg, rgba(74, 222, 128, 0.08), transparent 32%),
+    linear-gradient(310deg, rgba(147, 197, 253, 0.1), transparent 38%);
 }
 
 :root[data-theme="light"] .backdrop {
