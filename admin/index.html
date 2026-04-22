@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var theme = localStorage.getItem("oneway_admin_theme") || "dark";
+      document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+    })();
+  </script>
   <title>OneWay Admin</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -11,6 +17,10 @@
 
   <section id="authView" class="auth-view">
     <div class="auth-card">
+      <div class="theme-toggle auth-theme-toggle" role="group" aria-label="Theme">
+        <button type="button" class="theme-button" data-theme-value="dark">Dark</button>
+        <button type="button" class="theme-button" data-theme-value="light">Light</button>
+      </div>
       <p class="eyebrow">OneWay Admin</p>
       <h1>Админ самбар / Admin dashboard</h1>
       <p class="auth-copy">
@@ -52,6 +62,10 @@
       </div>
 
       <div class="topbar-actions">
+        <div class="theme-toggle" role="group" aria-label="Theme">
+          <button type="button" class="theme-button" data-theme-value="dark">Dark</button>
+          <button type="button" class="theme-button" data-theme-value="light">Light</button>
+        </div>
         <div class="admin-meta">
           <span id="adminIdentity" class="pill">Нэвтрээгүй / Not signed in</span>
           <span id="apiBaseBadge" class="pill muted">API: /api</span>

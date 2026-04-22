@@ -1,6 +1,7 @@
 const state = {
   apiBase: localStorage.getItem("oneway_admin_api_base") || "/api",
   token: localStorage.getItem("oneway_admin_token") || "",
+  theme: localStorage.getItem("oneway_admin_theme") === "light" ? "light" : "dark",
   admin: null,
   currentView: "overview",
   overview: null,
@@ -79,6 +80,22 @@ function statusTone(status) {
 function setMessage(target, message, isError = false) {
   target.textContent = message || "";
   target.style.color = isError ? "var(--danger)" : "var(--muted)";
+}
+
+function normalizeTheme(theme) {
+  return theme === "light" ? "light" : "dark";
+}
+
+function applyTheme(theme) {
+  state.theme = normalizeTheme(theme);
+  document.documentElement.dataset.theme = state.theme;
+  localStorage.setItem("oneway_admin_theme", state.theme);
+
+  document.querySelectorAll(".theme-button").forEach((button) => {
+    const active = button.dataset.themeValue === state.theme;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
 }
 
 function serializeForm(form) {
@@ -496,6 +513,10 @@ function bindEvents() {
     button.addEventListener("click", () => changeView(button.dataset.view));
   });
 
+  document.querySelectorAll(".theme-button").forEach((button) => {
+    button.addEventListener("click", () => applyTheme(button.dataset.themeValue));
+  });
+
   elements.refreshOverviewButton.addEventListener("click", () => loadOverview());
   elements.refreshUsersButton.addEventListener("click", () => loadUsers(state.users.pagination.page || 1));
   elements.refreshRidesButton.addEventListener("click", () => loadRides(state.rides.pagination.page || 1));
@@ -598,6 +619,7 @@ function initElements() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   initElements();
+  applyTheme(state.theme);
   updateApiBaseUi();
   bindEvents();
   renderAuthState();
