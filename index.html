@@ -3,106 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OneWay</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      text-align: center;
-      animation: fadeIn 1.5s ease forwards;
-      opacity: 0;
-    }
-
-    .logo {
-      font-size: 56px;
-      font-weight: 700;
-      letter-spacing: 4px;
-      margin-bottom: 12px;
-    }
-
-    .tagline {
-      font-size: 18px;
-      opacity: 0.85;
-      margin-bottom: 20px;
-    }
-
-    .coming {
-      font-size: 14px;
-      letter-spacing: 4px;
-      opacity: 0.6;
-      margin-bottom: 30px;
-    }
-
-    .hero-img {
-      width: 100%;
-      max-width: 500px;
-      border-radius: 12px;
-      margin: 20px 0 40px 0;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .logo {
-        font-size: 40px;
-      }
-
-      .story {
-        font-size: 14px;
-      }
-    }
-  </style>
+  <meta
+    name="description"
+    content="OneWay нь нэг чиглэлд явдаг жолооч болон зорчигчийг холбож, суудлын зардлаа хуваалцах carpool апп юм."
+  />
+  <title>OneWay APK</title>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
-
 <body>
-  <div class="container">
-    <div class="logo">ONEWAY</div>
-    <div class="tagline">Нэг чиглэл. Нэг зам. Хамтдаа.</div>
-    <div class="coming">COMING SOON...mj</div>
-
-    <img src="./images/fireH.jpg" class="hero-img" alt="OneWay Image" />
-
-    <div style="text-align: center; margin: 32px 0 20px 0;">
-      <a
-        href="./downloads/oneway-1.0.1.apk"
-        download
-        style="
-          display: inline-block;
-          background: #22c55e;
-          color: white;
-          text-decoration: none;
-          padding: 14px 28px;
-          border-radius: 12px;
-          font-size: 18px;
-          font-weight: 700;
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-        "
-      >
-        OneWay APK татах 50mb
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="OneWay">
+      <img src="./images/logo.png" alt="" class="brand-mark" />
+      <img src="./images/oneway-wordmark.png" alt="OneWay" class="brand-wordmark" />
+    </a>
+    <nav class="header-actions" aria-label="Үндсэн холбоос">
+      <a href="#benefits">Давуу тал</a>
+      <a href="#how">Ажиллах зарчим</a>
+      <a class="header-download" href="./downloads/oneway-1.0.1-meetup-background.apk" download>
+        APK татах
       </a>
-    </div>
-  </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img src="./images/city.png" alt="" class="hero-city" />
+      <img src="./images/carpool.png" alt="" class="hero-car" />
+
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Android build 1.0.1</p>
+        <h1 id="hero-title">OneWay APK</h1>
+        <p class="hero-copy">
+          Нэг чиглэлд явдаг жолооч болон зорчигчийг нэг машинд холбоно. Суудлын
+          зардлаа хувааж, өдөр бүрийн замаа илүү хялбар, итгэлтэй болгоорой.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="./downloads/oneway-1.0.1-meetup-background.apk" download>
+            APK татах
+          </a>
+          <a class="button button-secondary" href="#how">Яаж ажилладаг вэ?</a>
+        </div>
+        <p class="download-note">
+          Android APK файл. Version 1.0.1 meetup background build.
+        </p>
+      </div>
+    </section>
+
+    <section id="benefits" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Хэрэглэгчдэд хэрэгтэй гол зүйл</p>
+          <h2>OneWay яагаад хэрэгтэй вэ?</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">2+</div>
+            <h3>Хамт зорчих</h3>
+            <p>Ойролцоо чиглэлтэй хүмүүс нэг машинд сууж зардлаа хуваана.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">GPS</div>
+            <h3>Чиглэл харах</h3>
+            <p>Жолоочийн чиглэл, суудлын тоо, үнэ, цагийг нэг дор харна.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">OK</div>
+            <h3>Итгэлтэй хэрэглээ</h3>
+            <p>Бүртгэл, үнэлгээ, баталгаажсан мэдээлэл дээр тулгуурлан сонголт хийнэ.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">₮</div>
+            <h3>Зардал хэмнэх</h3>
+            <p>Өдөр бүр такси барихаас илүү хямд, тогтмол зорчих боломж нээнэ.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section section-muted">
+      <div class="container how-grid">
+        <div class="visual-panel" aria-hidden="true">
+          <img src="./images/city.png" alt="" class="visual-city" />
+          <div class="road"></div>
+          <img src="./images/carpool.png" alt="" class="visual-car" />
+          <div class="route-chip route-chip-top">3 суудал</div>
+          <div class="route-chip route-chip-bottom">Нэг чиглэл</div>
+        </div>
+
+        <div>
+          <p class="eyebrow">Ажиллах дараалал</p>
+          <h2>4 алхмаар хамт зорчино</h2>
+          <div class="steps">
+            <div class="step">
+              <span>1</span>
+              <p>Апп татаж бүртгүүлнэ.</p>
+            </div>
+            <div class="step">
+              <span>2</span>
+              <p>Явах болон очих байршлаа сонгоно.</p>
+            </div>
+            <div class="step">
+              <span>3</span>
+              <p>Тохирох жолооч эсвэл зорчигчоо олно.</p>
+            </div>
+            <div class="step">
+              <span>4</span>
+              <p>Хамт зорчиж, сул суудлыг ашигтай болгоно.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container download-panel">
+        <p class="eyebrow">OneWay Android</p>
+        <h2>Өдөр бүрийн нэг чиглэлийг илүү ухаалаг болгоё</h2>
+        <p>
+          OneWay нь зорчигчид зардал хэмнэх, жолоочид сул суудлаа ашиглах,
+          хотод нэг чиглэлд давхцах хөдөлгөөнийг багасгах боломж санал болгоно.
+        </p>
+        <a class="button button-primary" href="./downloads/oneway-1.0.1-meetup-background.apk" download>
+          OneWay APK татах
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>OneWay</span>
+    <span>Нэг чиглэл. Нэг зам. Хамтдаа.</span>
+  </footer>
 </body>
 </html>
