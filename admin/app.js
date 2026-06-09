@@ -6,6 +6,7 @@ const state = {
   currentView: "overview",
   overview: null,
   users: { items: [], pagination: { page: 1, total_pages: 0 } },
+  routeStats: { items: [], pagination: { page: 1, total_pages: 0 } },
   rides: { items: [], pagination: { page: 1, total_pages: 0 } },
   bookings: { items: [], pagination: { page: 1, total_pages: 0 } },
 };
@@ -273,6 +274,12 @@ function renderUsers() {
               </td>
               <td>${buildBadge(translateRole(user.role), "info")}</td>
               <td>
+                <div class="stack">
+                  <strong>${escapeHtml(user.routes_count ?? 0)}</strong>
+                  <span class="muted">${escapeHtml(bi("зурсан зам", "routes drawn"))}</span>
+                </div>
+              </td>
+              <td>
                 <div class="badge-row">
                   ${buildBadge(translateStatus(user.verification_status || "none"), statusTone(user.verification_status))}
                   ${user.email_verified ? buildBadge(bi("Имэйл", "Email"), "success") : ""}
@@ -299,9 +306,43 @@ function renderUsers() {
           `
         )
         .join("")
-    : `<tr><td colspan="7"><div class="empty-state">${escapeHtml(bi("Хэрэглэгч олдсонгүй", "No users found"))}.</div></td></tr>`;
+    : `<tr><td colspan="8"><div class="empty-state">${escapeHtml(bi("Хэрэглэгч олдсонгүй", "No users found"))}.</div></td></tr>`;
 
   renderPagination("users", state.users.pagination);
+}
+
+function renderRouteStats() {
+  const rows = state.routeStats.items || [];
+  elements.routeStatsTableBody.innerHTML = rows.length
+    ? rows
+        .map(
+          (item) => `
+            <tr>
+              <td>
+                <div class="stack">
+                  <strong>${escapeHtml(item.name || bi("Нэргүй", "No name"))}</strong>
+                  <span class="muted">#${escapeHtml(item.user_id || "-")} | ${escapeHtml(item.phone || "-")}</span>
+                  <span class="muted">${escapeHtml(item.email || "-")}</span>
+                </div>
+              </td>
+              <td>
+                <div class="stack">
+                  <strong>${escapeHtml(item.routes_count)}</strong>
+                  <span class="muted">${escapeHtml(translateRole(item.role))}</span>
+                </div>
+              </td>
+              <td>${buildBadge(String(item.active_routes_count ?? 0), "success")}</td>
+              <td>${buildBadge(String(item.completed_routes_count ?? 0), "info")}</td>
+              <td>${buildBadge(String(item.cancelled_routes_count ?? 0), "danger")}</td>
+              <td>${escapeHtml(formatDate(item.first_route_created_at))}</td>
+              <td>${escapeHtml(formatDate(item.last_route_created_at))}</td>
+            </tr>
+          `
+        )
+        .join("")
+    : `<tr><td colspan="7"><div class="empty-state">${escapeHtml(bi("Зам зурсан хэрэглэгч олдсонгүй", "No route stats found"))}.</div></td></tr>`;
+
+  renderPagination("routeStats", state.routeStats.pagination);
 }
 
 function renderRides() {
@@ -431,7 +472,7 @@ async function loadSession() {
 
 async function bootstrapDashboard() {
   renderNav();
-  await Promise.all([loadOverview(), loadUsers(1), loadRides(1), loadBookings(1)]);
+  await Promise.all([loadOverview(), loadUsers(1), loadRouteStats(1), loadRides(1), loadBookings(1)]);
 }
 
 async function loadOverview() {
@@ -454,6 +495,21 @@ async function loadUsers(page = 1) {
   try {
     state.users = await api(`/admin/users?${params.toString()}`);
     renderUsers();
+    setMessage(elements.globalMessage, "");
+  } catch (error) {
+    setMessage(elements.globalMessage, error.message, true);
+  }
+}
+
+async function loadRouteStats(page = 1) {
+  const params = serializeForm(elements.routeStatsFilters);
+  params.set("page", page);
+  params.set("page_size", 20);
+  setMessage(elements.globalMessage, `${bi("Зам статистик ачаалж байна", "Loading route stats")}...`);
+
+  try {
+    state.routeStats = await api(`/admin/route-stats?${params.toString()}`);
+    renderRouteStats();
     setMessage(elements.globalMessage, "");
   } catch (error) {
     setMessage(elements.globalMessage, error.message, true);
@@ -519,12 +575,18 @@ function bindEvents() {
 
   elements.refreshOverviewButton.addEventListener("click", () => loadOverview());
   elements.refreshUsersButton.addEventListener("click", () => loadUsers(state.users.pagination.page || 1));
+  elements.refreshRouteStatsButton.addEventListener("click", () => loadRouteStats(state.routeStats.pagination.page || 1));
   elements.refreshRidesButton.addEventListener("click", () => loadRides(state.rides.pagination.page || 1));
   elements.refreshBookingsButton.addEventListener("click", () => loadBookings(state.bookings.pagination.page || 1));
 
   elements.usersFilters.addEventListener("submit", (event) => {
     event.preventDefault();
     loadUsers(1);
+  });
+
+  elements.routeStatsFilters.addEventListener("submit", (event) => {
+    event.preventDefault();
+    loadRouteStats(1);
   });
 
   elements.ridesFilters.addEventListener("submit", (event) => {
@@ -546,6 +608,18 @@ function bindEvents() {
   elements.usersNextButton.addEventListener("click", () => {
     if ((state.users.pagination.page || 1) < (state.users.pagination.total_pages || 0)) {
       loadUsers(state.users.pagination.page + 1);
+    }
+  });
+
+  elements.routeStatsPrevButton.addEventListener("click", () => {
+    if ((state.routeStats.pagination.page || 1) > 1) {
+      loadRouteStats(state.routeStats.pagination.page - 1);
+    }
+  });
+
+  elements.routeStatsNextButton.addEventListener("click", () => {
+    if ((state.routeStats.pagination.page || 1) < (state.routeStats.pagination.total_pages || 0)) {
+      loadRouteStats(state.routeStats.pagination.page + 1);
     }
   });
 
@@ -600,6 +674,12 @@ function initElements() {
     "usersPrevButton",
     "usersNextButton",
     "usersPaginationLabel",
+    "routeStatsFilters",
+    "routeStatsTableBody",
+    "refreshRouteStatsButton",
+    "routeStatsPrevButton",
+    "routeStatsNextButton",
+    "routeStatsPaginationLabel",
     "ridesFilters",
     "ridesTableBody",
     "refreshRidesButton",
@@ -626,6 +706,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderNav();
   renderOverview();
   renderUsers();
+  renderRouteStats();
   renderRides();
   renderBookings();
   await loadSession();
