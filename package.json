@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "node scripts/validate-site.mjs build",
+    "typecheck": "node scripts/validate-site.mjs typecheck",
+    "lint": "node scripts/validate-site.mjs lint"
+  },
+  "devDependencies": {}
+}
