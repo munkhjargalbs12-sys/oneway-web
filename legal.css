@@ -53,6 +53,10 @@
   line-height: 1.72;
 }
 
+.legal-hero-copy + .legal-hero-copy {
+  margin-top: 12px;
+}
+
 .legal-meta {
   display: flex;
   flex-wrap: wrap;
@@ -208,6 +212,11 @@
   color: var(--text-muted);
   font-size: 15px;
   line-height: 1.65;
+}
+
+.topic-card p + p {
+  margin-top: 8px;
+  color: var(--text);
 }
 
 .contact-strip {
